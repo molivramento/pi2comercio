@@ -1,13 +1,10 @@
 from fastapi import FastAPI
+from database import config_database
+
+from app.products.api import router as product_router
+
+config_database()
 
 app = FastAPI()
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+app.include_router(product_router, prefix='/products', tags=['Product'])
