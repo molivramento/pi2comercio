@@ -1,2 +1,3 @@
 .env
 dev.sqlite
+test.sqlite
