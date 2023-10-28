@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.11"
 fastapi = "^0.104.0"
 uvicorn = "^0.23.2"
+ormar = {extras = ["postgresql"], version = "^0.12.2"}
+python-dotenv = "^1.0.0"
 
 
 [build-system]
