@@ -1,4 +1,3 @@
 dev.sqlite
 test.sqlite
 venv
-.env
