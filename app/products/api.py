@@ -1,6 +1,7 @@
 from uuid import uuid4, UUID
 
-from fastapi import APIRouter
+import ormar
+from fastapi import APIRouter, HTTPException
 
 from app.products.models import Product
 from app.products.schemas import ProductIn
@@ -20,11 +21,17 @@ async def create_product(payload: ProductIn):
 
 @router.put("/", response_model=Product | dict)
 async def update_product(payload: Product):
-    product = await Product.objects.get(id=payload.id)
-    return await product.update(**payload.dict())
+    try:
+        product = await Product.objects.get(id=payload.id)
+        return await product.update(**payload.dict())
+    except ormar.exceptions.NoMatch:
+        raise HTTPException(status_code=404, detail="Product not found")
 
 
-@router.delete("/{pk}", response_model=int | str)
+@router.delete("/{pk}")
 async def delete_product(pk: UUID):
-    product = await Product.objects.get(id=pk)
-    return await product.delete()
+    try:
+        product = await Product.objects.get(id=pk)
+        return await product.delete()
+    except ormar.exceptions.NoMatch:
+        raise HTTPException(status_code=404, detail="Product not found")
