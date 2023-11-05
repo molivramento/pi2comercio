@@ -17,7 +17,7 @@ def client() -> Generator:
         yield c
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(autouse=True)
 def cleanup_test_db():
     yield
     os.remove("./test.sqlite")
