@@ -1,61 +1,23 @@
 version: '3'
-
 services:
-  app:
+  web:
     build:
       context: .
-    volumes:
-      - ./app:/app
-      - ./img:/app/img  # Armazene o diretório de imagens no volume da aplicação
+      dockerfile: Dockerfile
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8000"
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-      - redis
-      - elasticsearch
     environment:
-      - DATABASE_URL=postgresql://yourdbuser:yourdbpassword@db:5432/yourdbname
-      - REDIS_URL=redis://redis:6379/0
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: yourdbname
-      POSTGRES_USER: yourdbuser
-      POSTGRES_PASSWORD: yourdbpassword
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
-    ports:
-      - "9200:9200"
-
-  nginx_reverse_proxy:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx_reverse_proxy.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
-
-  nginx_image_server:
-    image: nginx:latest
-    ports:
-      - "8080:80"
-    volumes:
-      - ./nginx_image_server.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
-
-volumes:
-  postgres_data:
+      # DATABASE
+      - DATABASE_URL=sqlite:///dev.sqlite
+      - TEST_DATABASE_URL=sqlite:///test.sqlite
+      # JWT
+      - SECRET_ACCESS_KEY=00704b2e9e3d30b6c788f951ee310b1e2945d91c3d1a90456081f72708f23e13
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      - SECRET_REFRESH_KEY=2ece8f35da23af738b5456024308314ffb5f7940694e9502a72967078afe6b6a
+      - REFRESH_TOKEN_EXPIRE_DAYS=1
+      - ALGORITHM=HS256
+      # AWS BUCKET
+      - AWS_ACCESS_KEY_ID=
+      - AWS_SECRET_ACCESS_KEY=
+      - BUCKET_NAME=

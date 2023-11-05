@@ -1,8 +1,6 @@
-from uuid import uuid4, UUID
-
 import ormar
+from uuid import uuid4, UUID
 from fastapi import APIRouter, HTTPException
-
 from app.products.models import Product
 from app.products.schemas import ProductIn
 
@@ -12,6 +10,14 @@ router = APIRouter()
 @router.get("/", response_model=list[Product] | dict)
 async def get_products():
     return await Product.objects.all()
+
+
+@router.get("/{pk}", response_model=Product | dict)
+async def get_product(pk: UUID):
+    try:
+        return await Product.objects.get(id=pk)
+    except ormar.exceptions.NoMatch:
+        raise HTTPException(status_code=404, detail="Product not found")
 
 
 @router.post("/", response_model=Product | dict)
