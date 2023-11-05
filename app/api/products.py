@@ -1,8 +1,8 @@
 import ormar
 from uuid import uuid4, UUID
 from fastapi import APIRouter, HTTPException
-from app.products.models import Product
-from app.products.schemas import ProductIn
+from app.models.products import Product
+from app.schemas.products import ProductIn
 
 router = APIRouter()
 
@@ -18,6 +18,14 @@ async def get_product(pk: UUID):
         return await Product.objects.get(id=pk)
     except ormar.exceptions.NoMatch:
         raise HTTPException(status_code=404, detail="Product not found")
+
+
+@router.get("/name/{name}", response_model=list[Product] | dict)
+async def get_products_by_name(name: str):
+    products = await Product.objects.filter(name__icontains=name).all()
+    if products:
+        return products
+    raise HTTPException(status_code=404, detail="Product not found")
 
 
 @router.post("/", response_model=Product | dict)

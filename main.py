@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database import config_database
 
-from app.products.api import router as product_router
+from app.api.products import router as product_router
 
 config_database()
 
