@@ -31,8 +31,7 @@ async def get_products_by_name(name: str):
 
 
 @router.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    print(file)
+async def upload_file(file: UploadFile):
     directory = f'static/products/{file.filename}'
     with open(f"{directory}/", "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
