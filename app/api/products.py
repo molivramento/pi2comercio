@@ -31,7 +31,7 @@ async def get_products_by_name(name: str):
 
 
 @router.post("/")
-async def create_product(payload: ProductIn, file: UploadFile | None = None):
+async def create_product(payload: ProductIn, file: UploadFile = File(...)):
     if file:
         with open(f"static/products/{file.filename}", "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
