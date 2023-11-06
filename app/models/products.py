@@ -8,8 +8,8 @@ class Product(ormar.Model):
         tablename = "products"
 
     id: UUID = ormar.UUID(primary_key=True, editable=False)
-    name: str = ormar.String(max_length=64)
+    name: str = ormar.String(max_length=64, unique=True)
     description: str = ormar.String(max_length=256)
     price: float = ormar.Float()
     quantity: int = ormar.Integer()
-    img: str = ormar.String(max_length=256)
+    img: str = ormar.String(max_length=256, nullable=True)

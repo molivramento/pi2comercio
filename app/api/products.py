@@ -1,6 +1,8 @@
+import shutil
+
 import ormar
 from uuid import uuid4, UUID
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile, File
 from app.models.products import Product
 from app.schemas.products import ProductIn
 
@@ -28,8 +30,15 @@ async def get_products_by_name(name: str):
     raise HTTPException(status_code=404, detail="Product not found")
 
 
-@router.post("/", response_model=Product | dict)
-async def create_product(payload: ProductIn):
+@router.post("/")
+async def create_product(payload: ProductIn, file: UploadFile | None = None):
+    if file:
+        with open(f"static/products/{file.filename}", "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+            payload.img = f'static/products/{file.filename}'
+    else:
+        with open(f"static/products/default.pdf", "rb"):
+            payload.img = f'static/products/default.pdf'
     return await Product.objects.create(**payload.dict(), id=uuid4())
 
 

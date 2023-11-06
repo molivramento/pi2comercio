@@ -12,7 +12,6 @@ class TestProduct:
         assert response.json()['description'] == 'test'
         assert response.json()['price'] == 1.55
         assert response.json()['quantity'] == 2
-        assert response.json()['img'] == 'test'
 
     def test_get_all_products(self, client: TestClient) -> None:
         create_product(client)
@@ -29,7 +28,6 @@ class TestProduct:
         assert response.json()['description'] == 'test'
         assert response.json()['price'] == 1.55
         assert response.json()['quantity'] == 2
-        assert response.json()['img'] == 'test'
 
     def test_get_product_by_name(self, client: TestClient) -> None:
         create_product(client)
@@ -40,7 +38,6 @@ class TestProduct:
         assert response.json()[0]['description'] == 'test'
         assert response.json()[0]['price'] == 1.55
         assert response.json()[0]['quantity'] == 2
-        assert response.json()[0]['img'] == 'test'
 
     def test_update_products(self, client: TestClient) -> None:
         product = create_product(client).json()
