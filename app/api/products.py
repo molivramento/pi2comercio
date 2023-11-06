@@ -37,8 +37,7 @@ async def create_product(payload: ProductIn, file: UploadFile | None = None):
             shutil.copyfileobj(file.file, buffer)
             payload.img = f'static/products/{file.filename}'
     else:
-        with open(f"static/products/default.pdf", "rb"):
-            payload.img = f'static/products/default.pdf'
+        payload.img = f'static/products/default.png'
     return await Product.objects.create(**payload.dict(), id=uuid4())
 
 
