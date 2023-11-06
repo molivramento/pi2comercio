@@ -30,14 +30,16 @@ async def get_products_by_name(name: str):
     raise HTTPException(status_code=404, detail="Product not found")
 
 
+@router.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+    directory = f'static/products/{file.filename}'
+    with open(f"{directory}/", "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return directory
+
+
 @router.post("/")
-async def create_product(payload: ProductIn, file: UploadFile = File(...)):
-    if file:
-        with open(f"static/products/{file.filename}", "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-            payload.img = f'static/products/{file.filename}'
-    else:
-        payload.img = f'static/products/default.png'
+async def create_product(payload: ProductIn):
     return await Product.objects.create(**payload.dict(), id=uuid4())
 
 
