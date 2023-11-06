@@ -12,9 +12,13 @@ services:
     volumes:
       - .:/app
 
-  nginx_cache:
+  nginx:
     image: nginx:alpine
     volumes:
-      - ./statics:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./static/products:/app/static/products
     ports:
-      - "8080:80"
+      - "80:80"
+    depends_on:
+      - fastapi
+
