@@ -12,7 +12,7 @@ services:
     volumes:
       - .:/app
     networks:
-      - my_network
+      - pi2
 
   nginx:
     image: nginx:alpine
@@ -21,7 +21,7 @@ services:
     ports:
       - "80:80"
     networks:
-      - my_network
+      - pi2
     depends_on:
       - fastapi
 
