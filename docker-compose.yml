@@ -18,6 +18,7 @@ services:
     image: nginx:alpine
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./static/products:/usr/share/nginx/html
     ports:
       - "80:80"
     networks:
