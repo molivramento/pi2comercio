@@ -1,5 +1,3 @@
-import shutil
-
 import ormar
 from uuid import uuid4, UUID
 from fastapi import APIRouter, HTTPException, UploadFile, Depends, File
@@ -20,8 +18,7 @@ async def get_products(filters: GetProduct = Depends()):
 
 @router.post("/")
 async def create_product(data: ProductIn, file: UploadFile | None = None):
-
-    return await product_service.create(payload=Product(**data.dict(), img=directory, id=uuid4()))
+    return await product_service.create(payload=data, file=file)
 
 
 @router.put("/", response_model=Product | dict)

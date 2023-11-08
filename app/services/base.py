@@ -1,6 +1,6 @@
-from uuid import uuid4
-
 import ormar
+import shutil
+from uuid import uuid4
 from pydantic import BaseModel
 from fastapi import HTTPException, status
 
@@ -53,7 +53,7 @@ class BaseService:
         else:
             directory = f'static/products/default.pdf'
         await self.verify_unique_field(payload)
-        return await self.model.objects.create(**payload.dict())
+        return await self.model.objects.create(**payload.dict(), img=directory, id=uuid4())
 
     async def update(self, payload: BaseModel):
         await self.verify_unique_field(payload)

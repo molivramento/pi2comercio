@@ -1,4 +1,4 @@
-from app.schemas.products import ProductUniqueField
+from app.schemas.products import ProductUniqueField, ProductIn
 from app.services.base import BaseService
 from app.models.products import Product
 
@@ -6,7 +6,8 @@ from app.models.products import Product
 class ProductService(BaseService):
     def __init__(self):
         super().__init__(model=Product, related=None, unique_field=ProductUniqueField)
+        self.model = Product
 
-    async def create(self, payload: Product, file):
+    async def create(self, payload: ProductIn, file):
         return await super().create(payload, file)
 
