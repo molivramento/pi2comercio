@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="dev [2]" uuid="5aead1b3-11ff-4714-9804-f07e0a36bc26">
-      <driver-ref>785a4507-2c6e-4ba5-8eb3-a2eb189c4ea5</driver-ref>
+      <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/dev.sqlite</jdbc-url>
@@ -14,7 +14,7 @@
       </libraries>
     </data-source>
     <data-source source="LOCAL" name="test" uuid="68c07754-6d1e-4fc7-b223-bedcb7ad6fd5">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>a27e0c8e-0c29-46b7-9c28-676a3e4001aa</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/test.sqlite</jdbc-url>

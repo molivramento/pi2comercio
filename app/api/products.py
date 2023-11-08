@@ -2,45 +2,26 @@ import shutil
 
 import ormar
 from uuid import uuid4, UUID
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, Depends, File
 from app.models.products import Product
-from app.schemas.products import ProductIn
+from app.schemas.products import ProductIn, GetProduct
+
+from app.services.products import ProductService
 
 router = APIRouter()
 
+product_service = ProductService()
+
 
 @router.get("/", response_model=list[Product] | dict)
-async def get_products():
-    return await Product.objects.all()
-
-
-@router.get("/{pk}", response_model=Product | dict)
-async def get_product(pk: UUID):
-    try:
-        return await Product.objects.get(id=pk)
-    except ormar.exceptions.NoMatch:
-        raise HTTPException(status_code=404, detail="Product not found")
-
-
-@router.get("/name/{name}", response_model=list[Product] | dict)
-async def get_products_by_name(name: str):
-    products = await Product.objects.filter(name__icontains=name).all()
-    if products:
-        return products
-    raise HTTPException(status_code=404, detail="Product not found")
-
-
-@router.post("/upload")
-async def upload_file(file: UploadFile):
-    directory = f'static/products/{file.filename}'
-    with open(f"{directory}", "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    return directory
+async def get_products(filters: GetProduct = Depends()):
+    return await product_service.get(filters)
 
 
 @router.post("/")
-async def create_product(payload: ProductIn):
-    return await Product.objects.create(**payload.dict(), id=uuid4())
+async def create_product(data: ProductIn, file: UploadFile | None = None):
+
+    return await product_service.create(payload=Product(**data.dict(), img=directory, id=uuid4()))
 
 
 @router.put("/", response_model=Product | dict)
