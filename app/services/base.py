@@ -59,15 +59,9 @@ class BaseService:
         # TODO: Need a function to delete the old file
         obj = await self.model.objects.get(id=payload.id)
         if file and file.size < 5000000:
-            old_file = obj.img
             payload.img = f'static/products/{file.filename}'
             with open(f"{payload.img}", "wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)
-            if old_file != payload.img:
-                try:
-                    shutil.rmtree(old_file)
-                except FileNotFoundError:
-                    pass
         elif obj.img is None:
             payload.img = 'static/products/default.png'
         return await obj.update(**payload.dict())
