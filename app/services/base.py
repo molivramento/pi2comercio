@@ -29,6 +29,19 @@ class BaseService:
             except ormar.exceptions.NoMatch:
                 pass
 
+    async def create(self, payload: BaseModel, file):
+        # TODO: 5000000 = 5MB (MAX SIZE), NEED SETTING IN ENV OR CONFIG
+        # TODO: NEED ADD MINE TYPE VALIDATION (JPEG, PNG, SVG, WEBP), NEED SETTING IN ENV OR CONFIG
+        # TODO: NEED VERIFY FILE EXISTS
+        if file and file.size < 5000000:
+            directory = f'static/products/{file.filename}'
+            with open(f"{directory}", "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+        else:
+            directory = f'static/products/default.pdf'
+        await self.verify_unique_field(payload)
+        return await self.model.objects.create(name = payload.name, price = payload.price, quantity = payload.quantity, description = payload.description, img=directory, id=uuid4())
+
     async def get(self, filters: BaseModel):
         query = self.model.objects
         filters_params = {k: v for k, v in filters.dict().items() if v}
@@ -41,19 +54,6 @@ class BaseService:
         else:
             response = await response.all()
         return response
-
-    async def create(self, payload: BaseModel, file):
-        # TODO: 5000000 = 5MB (MAX SIZE), NEED SETTING IN ENV OR CONFIG
-        # TODO: NEED ADD MINE TYPE VALIDATION (JPEG, PNG, SVG, WEBP), NEED SETTING IN ENV OR CONFIG
-        # TODO: NEED VERIFY FILE EXISTS
-        if file and file.size < 5000000:
-            directory = f'static/products/{file.filename}'
-            with open(f"{directory}", "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
-        else:
-            directory = f'static/products/default.pdf'
-        await self.verify_unique_field(payload)
-        return await self.model.objects.create(**payload.dict(), img=directory, id=uuid4())
 
     async def update(self, payload, file):
         # TODO: Need a function to delete the old file
