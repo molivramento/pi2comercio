@@ -5,10 +5,12 @@ from pydantic import BaseModel
 
 
 class ProductIn(BaseModel):
+    id: Optional[UUID] = None
     name: str
     description: str
     price: float
     quantity: int
+    img: Optional[str] = None
 
     @classmethod
     def __get_validators__(cls):

@@ -22,12 +22,13 @@ async def create_product(data: ProductIn, file: UploadFile | None = None):
 
 
 @router.put("/", response_model=Product | dict)
-async def update_product(payload: Product):
-    try:
-        product = await Product.objects.get(id=payload.id)
-        return await product.update(**payload.dict())
-    except ormar.exceptions.NoMatch:
-        raise HTTPException(status_code=404, detail="Product not found")
+async def update_product(payload: ProductIn, file: UploadFile | None = None):
+    return await product_service.update(payload=payload, file=file)
+    # try:
+    #     product = await Product.objects.get(id=payload.id)
+    #     return await product.update(**payload.dict())
+    # except ormar.exceptions.NoMatch:
+    #     raise HTTPException(status_code=404, detail="Product not found")
 
 
 @router.delete("/{pk}")

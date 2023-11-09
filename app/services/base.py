@@ -55,9 +55,22 @@ class BaseService:
         await self.verify_unique_field(payload)
         return await self.model.objects.create(**payload.dict(), img=directory, id=uuid4())
 
-    async def update(self, payload: BaseModel):
-        await self.verify_unique_field(payload)
-        return await self.model.objects.update(**payload.dict())
+    async def update(self, payload, file):
+        # TODO: Need a function to delete the old file
+        obj = await self.model.objects.get(id=payload.id)
+        if file and file.size < 5000000:
+            old_file = obj.img
+            payload.img = f'static/products/{file.filename}'
+            with open(f"{payload.img}", "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            if old_file != payload.img:
+                try:
+                    shutil.rmtree(old_file)
+                except FileNotFoundError:
+                    pass
+        elif obj.img is None:
+            payload.img = 'static/products/default.png'
+        return await obj.update(**payload.dict())
 
     async def delete(self, pk: uuid4):
         obj = await self.model.objects.filter(id=pk).first()

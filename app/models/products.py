@@ -9,7 +9,7 @@ class Product(ormar.Model):
 
     id: UUID = ormar.UUID(primary_key=True, editable=False)
     name: str = ormar.String(max_length=64, unique=True)
-    description: str = ormar.String(max_length=256)
+    description: str = ormar.Text()
     price: float = ormar.Float()
     quantity: int = ormar.Integer()
     img: str = ormar.String(max_length=256, nullable=True)

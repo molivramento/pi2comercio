@@ -1,3 +1,5 @@
+from typing import Union
+
 from app.schemas.products import ProductUniqueField, ProductIn
 from app.services.base import BaseService
 from app.models.products import Product
@@ -11,3 +13,5 @@ class ProductService(BaseService):
     async def create(self, payload: ProductIn, file):
         return await super().create(payload, file)
 
+    async def update(self, payload: ProductIn, file):
+        return await super().update(payload, file)
