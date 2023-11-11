@@ -28,19 +28,15 @@ async def get_products(filters: GetProduct = Depends()):
 
 
 @router.post("/")
-async def create_product(data: ProductIn, file: UploadFile | None = None):
-    return await product_service.create(payload=data, file=file)
+async def create_product(data: ProductIn):
+    return await product_service.create(payload=data)
 
 
 @router.put("/", response_model=Product | dict)
-async def update_product(payload: ProductIn, file: UploadFile | None = None):
-    return await product_service.update(payload=payload, file=file)
+async def update_product(payload: ProductIn):
+    return await product_service.update(payload=payload)
 
 
 @router.delete("/{pk}")
 async def delete_product(pk: UUID):
-    try:
-        product = await Product.objects.get(id=pk)
-        return await product.delete()
-    except ormar.exceptions.NoMatch:
-        raise HTTPException(status_code=404, detail="Product not found")
+    return await product_service.delete(pk=pk)

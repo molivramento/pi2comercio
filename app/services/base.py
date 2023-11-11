@@ -6,7 +6,7 @@ from fastapi import HTTPException, status
 
 
 class BaseService:
-    def __init__(self, model, unique_field=None, related: list[str] = None):
+    def __init__(self, model, path: str = None, unique_field=None, related: list[str] = None):
         """
         :param model: schema model
         :param unique_field: schema *UniqueField
@@ -15,6 +15,19 @@ class BaseService:
         self.model = model
         self.related = related
         self.unique_field = unique_field
+        self.path = path
+
+    async def upload(self, file):
+        # TODO: 5000000 = 5MB (MAX SIZE), NEED SETTING IN ENV OR CONFIG
+        # TODO: NEED ADD MINE TYPE VALIDATION (JPEG, PNG, SVG, WEBP), NEED SETTING IN ENV OR CONFIG
+        # TODO: NEED VERIFY FILE EXISTS
+        if file and file.size < 5000000:
+            directory = f'static/{self.path}/{file.filename}'
+            with open(f"{directory}", "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+        else:
+            directory = f'static/{self.path}/default.pdf'
+        return directory
 
     async def verify_unique_field(self, payload: BaseModel = None):
         payload = self.unique_field(**payload.dict())
@@ -29,18 +42,9 @@ class BaseService:
             except ormar.exceptions.NoMatch:
                 pass
 
-    async def create(self, payload: BaseModel, file):
-        # TODO: 5000000 = 5MB (MAX SIZE), NEED SETTING IN ENV OR CONFIG
-        # TODO: NEED ADD MINE TYPE VALIDATION (JPEG, PNG, SVG, WEBP), NEED SETTING IN ENV OR CONFIG
-        # TODO: NEED VERIFY FILE EXISTS
-        if file and file.size < 5000000:
-            directory = f'static/products/{file.filename}'
-            with open(f"{directory}", "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
-        else:
-            directory = f'static/products/default.pdf'
+    async def create(self, payload: BaseModel):
         await self.verify_unique_field(payload)
-        return await self.model.objects.create(name = payload.name, price = payload.price, quantity = payload.quantity, description = payload.description, img=directory, id=uuid4())
+        return await self.model.objects.create(**payload.dict(), id=uuid4())
 
     async def get(self, filters: BaseModel):
         query = self.model.objects
@@ -55,15 +59,9 @@ class BaseService:
             response = await response.all()
         return response
 
-    async def update(self, payload, file):
-        # TODO: Need a function to delete the old file
+    async def update(self, payload):
+        await self.verify_unique_field(payload)
         obj = await self.model.objects.get(id=payload.id)
-        if file and file.size < 5000000:
-            payload.img = f'static/products/{file.filename}'
-            with open(f"{payload.img}", "wb") as buffer:
-                shutil.copyfileobj(file.file, buffer)
-        elif obj.img is None:
-            payload.img = 'static/products/default.png'
         return await obj.update(**payload.dict())
 
     async def delete(self, pk: uuid4):
