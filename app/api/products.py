@@ -33,7 +33,7 @@ async def create_product(data: ProductIn):
 
 
 @router.put("/", response_model=Product | dict)
-async def update_product(payload: ProductIn):
+async def update_product(payload: Product):
     return await product_service.update(payload=payload)
 
 

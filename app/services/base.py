@@ -5,6 +5,14 @@ from pydantic import BaseModel
 from fastapi import HTTPException, status
 
 
+"""
+Não Altere o código abaixo!
+Crie um arquivo em app/services/ e herde BaseServices
+def __init__(self):
+    super().__init__(model=Exemplo, path='exemplos'...)
+"""
+
+
 class BaseService:
     def __init__(self, model, path: str = None, unique_field=None, related: list[str] = None):
         """
@@ -60,12 +68,20 @@ class BaseService:
         return response
 
     async def update(self, payload):
-        await self.verify_unique_field(payload)
-        obj = await self.model.objects.get(id=payload.id)
-        return await obj.update(**payload.dict())
+        # TODO: verificar se os novos dados possuem campos unicos conflitantes
+        # buscar o payload no banco de dados, verificar se os campos unicos registrados no banco de dado
+        # possuem o mesmo ID que o payload que será alterado
+        # await self.verify_unique_field(payload)
+        try:
+            obj = await self.model.objects.get(id=payload.id)
+            return await obj.update(**payload.dict())
+        except ormar.exceptions.NoMatch:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f'{self.model.__name__} not found')
 
     async def delete(self, pk: uuid4):
-        obj = await self.model.objects.filter(id=pk).first()
-        if obj is None:
+        try:
+            obj = await self.model.objects.get(id=pk)
+            return await obj.delete()
+        except ormar.exceptions.NoMatch:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'{self.model.__name__} not found')
-        return await obj.delete()
