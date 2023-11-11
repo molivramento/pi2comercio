@@ -2,3 +2,4 @@
 dev.sqlite
 test.sqlite
 venv
+**/__pycache__/
