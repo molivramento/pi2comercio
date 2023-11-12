@@ -12,4 +12,4 @@ class Product(ormar.Model):
     description: str = ormar.Text()
     price: float = ormar.Float()
     quantity: int = ormar.Integer()
-    img: str = ormar.String(max_length=256, nullable=True)
+    img: str = ormar.String(max_length=256, server_default=f'static/products/default.png')
