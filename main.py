@@ -10,7 +10,6 @@ from app.api.products import router as product_router
 
 config_database()
 
-
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")

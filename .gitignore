@@ -4,3 +4,9 @@ test.sqlite
 venv
 __pycache__/
 **/__pycache__/
+
+# Files
+static/*
+!static/products
+!static/products/default.png
+static/products/*
