@@ -1,3 +1,5 @@
+import sqlite3
+
 import ormar
 import shutil
 from uuid import uuid4
@@ -37,22 +39,12 @@ class BaseService:
             directory = f'static/{self.path}/default.pdf'
         return directory
 
-    async def verify_unique_field(self, payload: BaseModel = None):
-        payload = self.unique_field(**payload.dict())
-        if self.unique_field and payload is not None:
-            query = self.model.objects
-            filters_params = {k: v for k, v in payload.dict().items() if v}
-            try:
-                response = await query.filter(**filters_params).first()
-                if response is not None:
-                    raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                                        detail=f'{self.model.__name__} already exists')
-            except ormar.exceptions.NoMatch:
-                pass
-
     async def create(self, payload: BaseModel):
-        await self.verify_unique_field(payload)
-        return await self.model.objects.create(**payload.dict(), id=uuid4())
+        try:
+            return await self.model.objects.create(**payload.dict(), id=uuid4())
+        except sqlite3.IntegrityError:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                detail=f'{self.model.__name__} already exist')
 
     async def get(self, filters: BaseModel):
         query = self.model.objects
@@ -68,16 +60,15 @@ class BaseService:
         return response
 
     async def update(self, payload):
-        # TODO: verificar se os novos dados possuem campos unicos conflitantes
-        # buscar o payload no banco de dados, verificar se os campos unicos registrados no banco de dado
-        # possuem o mesmo ID que o payload que será alterado
-        # await self.verify_unique_field(payload)
         try:
             obj = await self.model.objects.get(id=payload.id)
             return await obj.update(**payload.dict())
         except ormar.exceptions.NoMatch:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail=f'{self.model.__name__} not found')
+        except sqlite3.IntegrityError:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                detail=f'{self.model.__name__} already exist')
 
     async def delete(self, pk: uuid4):
         try:
