@@ -24,25 +24,3 @@ class GetProduct(BaseModel):
     price__lte: Optional[float] = None
     quantity__gte: Optional[int] = None
     quantity__lte: Optional[int] = None
-
-
-# Multipart data and file
-# class ProductIn(BaseModel):
-#     id: Optional[UUID] = None
-#     name: str
-#     description: str
-#     price: float
-#     quantity: int
-#     img: Optional[str] = None
-#
-#     @classmethod
-#     def __get_validators__(cls):
-#         yield cls.validate_to_json
-#
-#     @classmethod
-#     def validate_to_json(cls, v):
-#         if isinstance(v, str):
-#             return cls(**json.loads(v))
-#         return v
-
-

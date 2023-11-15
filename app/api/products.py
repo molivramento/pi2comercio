@@ -1,25 +1,16 @@
-import shutil
-
-import ormar
 from uuid import UUID
-from fastapi import APIRouter, HTTPException, UploadFile, Depends, File
+from fastapi import APIRouter, UploadFile, Depends
 from app.models.products import Product
 from app.schemas.products import ProductIn, GetProduct
 
-from app.services.products import ProductService
+from app.services.products import product_service
 
 router = APIRouter()
-
-product_service = ProductService()
 
 
 @router.post("/upload")
 async def upload_images(file: UploadFile):
-    directory = f'static/products/{file.filename}'
-    if file.size < 5000000:
-        with open(f"{directory}", "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-    return directory
+    return await product_service.upload(file)
 
 
 @router.get("/", response_model=list[Product] | dict)

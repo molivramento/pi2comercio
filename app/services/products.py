@@ -7,3 +7,6 @@ class ProductService(BaseService):
         super().__init__(model=Product,
                          path='products',
                          related=None)
+
+
+product_service = ProductService()
