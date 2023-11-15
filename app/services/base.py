@@ -16,15 +16,13 @@ def __init__(self):
 
 
 class BaseService:
-    def __init__(self, model, path: str = None, unique_field=None, related: list[str] = None):
+    def __init__(self, model, path: str = None, related: list[str] = None):
         """
         :param model: schema model
-        :param unique_field: schema *UniqueField
         :param related: list of related models
         """
         self.model = model
         self.related = related
-        self.unique_field = unique_field
         self.path = path
 
     async def upload(self, file):
