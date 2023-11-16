@@ -1,6 +1,8 @@
 .env
 dev.sqlite
 test.sqlite
+dev.db
+test.db
 venv
 __pycache__/
 **/__pycache__/
