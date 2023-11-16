@@ -3,20 +3,16 @@ from typing import Optional
 from pydantic import BaseModel
 
 from app.models.products import Product
+from app.schemas.base import BaseFilter
 
 ProductIn = Product.get_pydantic(
     exclude={
-        "id"
+        "uuid"
     }
 )
 
 
-class ProductUniqueField(BaseModel):
-    name: str
-
-
-class GetProduct(BaseModel):
-    id: Optional[UUID] = None
+class ProductFilter(BaseFilter):
     name: Optional[str] = None
     name__icontains: Optional[str] = None
     description__icontains: Optional[str] = None

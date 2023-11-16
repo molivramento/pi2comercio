@@ -2,7 +2,7 @@ import sqlite3
 
 import ormar
 import shutil
-from uuid import uuid4
+from uuid import uuid4, UUID
 from pydantic import BaseModel
 from fastapi import HTTPException, status
 
@@ -39,7 +39,7 @@ class BaseService:
 
     async def create(self, payload: BaseModel):
         try:
-            return await self.model.objects.create(**payload.dict(), id=uuid4())
+            return await self.model.objects.create(**payload.dict(), uuid=uuid4())
         except sqlite3.IntegrityError:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                 detail=f'{self.model.__name__} already exist')
@@ -59,7 +59,7 @@ class BaseService:
 
     async def update(self, payload):
         try:
-            obj = await self.model.objects.get(id=payload.id)
+            obj = await self.model.objects.get(uuid=payload.uuid)
             return await obj.update(**payload.dict())
         except ormar.exceptions.NoMatch:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -68,9 +68,9 @@ class BaseService:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                 detail=f'{self.model.__name__} already exist')
 
-    async def delete(self, pk: uuid4):
+    async def delete(self, uuid: UUID):
         try:
-            obj = await self.model.objects.get(id=pk)
+            obj = await self.model.objects.get(uuid=uuid)
             return await obj.delete()
         except ormar.exceptions.NoMatch:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'{self.model.__name__} not found')

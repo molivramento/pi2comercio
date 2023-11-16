@@ -1,4 +1,9 @@
-from typing import Union
+from typing import Optional
+from uuid import UUID
 
+from fastapi import Query
 from pydantic import BaseModel
-from ormar import ModelMeta
+
+
+class BaseFilter(BaseModel):
+    uuid: Optional[UUID] = None

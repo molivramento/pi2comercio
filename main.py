@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from database import config_database
 
 from app.api.products import router as product_router
+from app.api.users import router as user_router
 
 config_database()
 
@@ -14,7 +15,8 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.include_router(product_router, prefix='/products', tags=['Product'])
+app.include_router(product_router, prefix='/products', tags=['Products'])
+app.include_router(user_router, prefix='/users', tags=['Users'])
 
 origins = ['http://localhost:9000',
            'http://127.0.0.1:9000']
