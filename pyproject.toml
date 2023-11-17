@@ -16,6 +16,8 @@ pytest = "^7.4.3"
 httpx = "^0.25.0"
 boto3 = "^1.28.77"
 python-multipart = "^0.0.6"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [build-system]
