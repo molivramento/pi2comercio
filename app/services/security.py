@@ -1,10 +1,10 @@
 import os
 from datetime import datetime, timedelta
-from uuid import UUID
+from typing import Annotated
 
 from dotenv import load_dotenv
 from fastapi import HTTPException, status, Depends
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from passlib.context import CryptContext
 
@@ -63,6 +63,6 @@ async def decode_token(access_token: str):
                             detail="Invalid token")
 
 
-async def get_current_user(access_token: str = Depends(oauth2_scheme)):
+async def get_current_user(access_token: Annotated[str, Depends(oauth2_scheme)]):
     payload = await decode_token(access_token=access_token)
     return await user_service.get(UserFilter(email=payload['email']))

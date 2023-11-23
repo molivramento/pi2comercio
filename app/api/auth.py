@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, Request
 
 from app.services.security import create_token, get_current_user
@@ -17,7 +19,6 @@ async def get_token(data: OAuth2PasswordRequestForm = Depends()):
                                     'is_superuser': user[0].is_superuser})
 
 
-@router.get("/me", response_model=UserOut, dependencies=[Depends(get_current_user)])
-async def get_me(request: Request):
-    print(request.headers)
-    return await get_current_user()
+@router.get("/me", response_model=UserOut)
+async def get_me(current_user: Annotated[UserOut, Depends(get_current_user)]):
+    return current_user[0]
