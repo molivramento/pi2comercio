@@ -1,4 +1,5 @@
-# PI2 Comércio
+# PI2 Comércio Backend
+# PI2 Comércio Frontend https://github.com/dreiver1/comercio-cliente
 
 ## Sobre
 O PI2 Comércio é um projeto de comércio eletrônico simples que permite aos usuários comprar e vender produtos. O projeto está **em andamento** e é desenvolvido em Python e utiliza as bibliotecas Flask, PostgreSQL, Docker, JQuery, Bootstrap e Google Cloud Platform.
