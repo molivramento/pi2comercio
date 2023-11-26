@@ -2,8 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from app.models.users import User
-from app.schemas.users import UserFilter, UserOut, UserIn
+from app.schemas.users import UserFilter, UserOut, UserIn, CreateUserIn
 from app.services.users import user_service
 
 router = APIRouter()
@@ -15,7 +14,7 @@ async def get_users(filters: UserFilter = Depends()):
 
 
 @router.post("/", response_model=UserOut | dict)
-async def create_user(data: UserIn):
+async def create_user(data: CreateUserIn):
     return await user_service.create(payload=data)
 
 

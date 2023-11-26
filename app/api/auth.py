@@ -1,9 +1,9 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.services.security import create_token, get_current_user
-from app.schemas.users import UserFilter, UserOut
+from app.schemas.users import UserFilter, UserOut, UserIn
 from app.services.users import user_service
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -26,3 +26,8 @@ async def get_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 @router.get("/me", response_model=UserOut)
 async def get_me(current_user: Annotated[UserOut, Depends(get_current_user)]):
     return current_user[0]
+
+
+@router.post("/register", response_model=UserOut)
+async def register(payload: UserIn):
+    return await user_service.create(payload=payload)
