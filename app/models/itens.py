@@ -1,12 +1,16 @@
 import ormar
 from uuid import UUID
 from database import BaseMeta
+from typing import Optional, Union, List
+from app.models.products import Products
+from app.models.transation import Transation
 
-
-class itens(ormar.Model):
+class Itens(ormar.Model):
     class Meta(BaseMeta):
         tablename = "itens"
 
-    id: UUID = ormar.UUID(primary_key=True, editable=False)
-    date: datetime = ormar.DateTime()
-    total_amount: float = ormar.Float()
+    uuid: UUID = ormar.UUID(primary_key=True, editable=False)
+    product = ormar.ForeignKey(Products)
+    transation = ormar.ForeignKey(Transation)
+    quantidade = ormar.Integer()
+    preco_unitario = ormar.Float()

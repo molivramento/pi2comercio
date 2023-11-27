@@ -3,7 +3,7 @@ from uuid import UUID
 from database import BaseMeta
 
 
-class Product(ormar.Model):
+class Products(ormar.Model):
     class Meta(BaseMeta):
         tablename = "products"
 

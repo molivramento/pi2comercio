@@ -2,10 +2,10 @@ from uuid import UUID
 from typing import Optional
 from pydantic import BaseModel
 
-from app.models.products import Product
+from app.models.products import Products
 from app.schemas.base import BaseFilter
 
-ProductIn = Product.get_pydantic(
+ProductIn = Products.get_pydantic(
     exclude={
         "uuid"
     }
