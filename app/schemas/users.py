@@ -13,9 +13,13 @@ UserIn = User.get_pydantic(
 
 UserOut = User.get_pydantic(
     exclude={
-        'password',
-        'is_active',
-        'is_superuser'
+        'password'
+    }
+)
+
+CreateUserIn = User.get_pydantic(
+    exclude={
+        'uuid'
     }
 )
 

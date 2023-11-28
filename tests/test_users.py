@@ -55,23 +55,23 @@ class TestUser:
         response = client.delete(f"/users/{uuid}")
         assert response.status_code == 200
 
-def test_delete_user_not_found(client: TestClient) -> None:
-    response = client.delete(f"/users/{uuid4()}")
-    assert response.status_code == 404
-    assert response.json()["detail"] == "User not found"
+    def test_delete_user_not_found(self, client: TestClient) -> None:
+        response = client.delete(f"/users/{uuid4()}")
+        assert response.status_code == 404
+        assert response.json()["detail"] == "User not found"
 
-def test_get_user_by_id_not_found(client: TestClient) -> None:
-    response = client.get(f"/users/?uuid={uuid4()}")
-    assert response.status_code == 200
-    assert response.json() == []
+    def test_get_user_by_id_not_found(self, client: TestClient) -> None:
+        response = client.get(f"/users/?uuid={uuid4()}")
+        assert response.status_code == 200
+        assert response.json() == []
 
-def test_get_user_by_email_not_found(client: TestClient) -> None:
-    response = client.get(f"/users/?email=morando@cacau.com")
-    assert response.status_code == 200
-    assert response.json() == []
+    def test_get_user_by_email_not_found(self, client: TestClient) -> None:
+        response = client.get(f"/users/?email=morango@cacau.com")
+        assert response.status_code == 200
+        assert response.json() == []
 
-def test_update_user_not_found(client: TestClient) -> None:
-    user = client.post("/users/", json=users).json()
-    user["uuid"] = str(uuid4())
-    response = client.put(f"/users/", json=user)
-    assert response.status_code == 404
+    def test_update_user_not_found(self, client: TestClient) -> None:
+        user = client.post("/users/", json=users).json()
+        user["uuid"] = str(uuid4())
+        response = client.put(f"/users/", json=user)
+        assert response.status_code == 404
