@@ -7,7 +7,7 @@ class Product(ormar.Model):
     class Meta(BaseMeta):
         tablename = "products"
 
-    uuid: UUID = ormar.UUID(primary_key=True, editable=False)
+    uuid: UUID = ormar.UUID(primary_key=True, editable=False, unique=True)
     name: str = ormar.String(max_length=64, unique=True)
     description: str = ormar.Text()
     price: float = ormar.Float()

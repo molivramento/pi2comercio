@@ -7,6 +7,6 @@ class Transation(ormar.Model):
     class Meta(BaseMeta):
         tablename = "transation"
 
-    uuid: UUID = ormar.UUID(primary_key=True, editable=False)
+    uuid: UUID = ormar.UUID(primary_key=True, editable=False, unique=True)
     date: date = ormar.DateTime()
     total_amount: float = ormar.Float()

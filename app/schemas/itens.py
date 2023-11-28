@@ -2,21 +2,16 @@ from uuid import UUID
 from typing import Optional
 from pydantic import BaseModel
 
-from app.models.products import Product
-from app.schemas.base import BaseFilter
+from app.models.itens import itens
 
-ProductIn = Product.get_pydantic(
+itenIn = itens.get_pydantic(
     exclude={
         "uuid"
     }
 )
 
 
-class IntensFilter(BaseFilter):
-    name: Optional[str] = None
-    name__icontains: Optional[str] = None
-    description__icontains: Optional[str] = None
-    price__gte: Optional[float] = None
-    price__lte: Optional[float] = None
-    quantity__gte: Optional[int] = None
-    quantity__lte: Optional[int] = None
+class itenFilter(BaseModel):
+    product: Optional[dict] = {'uuid': None}
+    transaction: Optional[dict] = {'uuid': None}
+    total_amount: Optional[int] = None
