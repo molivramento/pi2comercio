@@ -1,5 +1,4 @@
 from typing import Optional
-from pydantic import BaseModel
 
 from app.models.transation import Transation
 from app.schemas.base import BaseFilter

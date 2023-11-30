@@ -1,7 +1,4 @@
-from uuid import UUID
 from typing import Optional
-from pydantic import BaseModel
-
 from app.models.products import Product
 from app.schemas.base import BaseFilter
 
