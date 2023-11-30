@@ -1,16 +1,15 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from app.models.transation import Transation
+from app.models.transaction import Transaction
 from app.schemas.base import BaseFilter
 
-transationIN = Transation.get_pydantic(
+transactionIN = Transaction.get_pydantic(
     exclude={
         "uuid",
     }
 )
 
 
-class TransationFilter(BaseFilter):
-    total_amount: Optional[float] = None
+class TransactionFilter(BaseFilter):
     date: Optional[date] = None

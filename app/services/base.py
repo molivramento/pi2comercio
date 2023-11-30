@@ -39,7 +39,10 @@ class BaseService:
 
     async def create(self, payload: BaseModel):
         try:
-            return await self.model.objects.create(**payload.dict(), uuid=uuid4())
+            if payload:
+                return await self.model.objects.create(**payload.dict(), uuid=uuid4())
+            else:
+                return await self.model.objects.create(uuid=uuid4())
         except sqlite3.IntegrityError:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                 detail=f'{self.model.__name__} already exist')
