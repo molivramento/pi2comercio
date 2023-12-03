@@ -14,7 +14,6 @@ class Bill(ormar.Model):
     business: str = ormar.String(max_length=128)
     value: float = ormar.Float()
     febraban: str = ormar.String(max_length=128, nullable=True, server_default=None)
-    qr_code: str = ormar.String(max_length=128, nullable=True, server_default=None)
     description: str = ormar.String(max_length=255, nullable=True, server_default=None)
     due_date: date = ormar.Date()
     is_paid: bool = ormar.Boolean(default=False)

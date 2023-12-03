@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends
 
 from app.models.bills import Bill
@@ -22,6 +24,6 @@ async def update_bill(payload: Bill):
     return await bill_service.update(payload)
 
 
-@router.delete('/')
-async def delete_bill(payload: Bill):
-    return await bill_service.delete(payload)
+@router.delete('/{uuid}')
+async def delete_bill(uuid: UUID):
+    return await bill_service.delete(uuid)
