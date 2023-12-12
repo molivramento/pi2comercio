@@ -1,5 +1,6 @@
 .env
 dev.sqlite
+dev.sqlite3
 test.sqlite
 dev.db
 test.db
