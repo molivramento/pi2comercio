@@ -1,11 +1,5 @@
 from typing import Optional
-<<<<<<< HEAD
-from pydantic import BaseModel
-
 from app.models.products import Products
-=======
-from app.models.products import Product
->>>>>>> fbe94ee0bf0dd76cbbd81f5559c511db5e196914
 from app.schemas.base import BaseFilter
 
 ProductIn = Products.get_pydantic(

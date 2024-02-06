@@ -1,6 +1,6 @@
 from app.services.base import BaseService
 from app.models.items import items
-from app.models.products import Product
+from app.models.products import Products
 from app.models.transaction import Transaction
 
 from fastapi import HTTPException, status
