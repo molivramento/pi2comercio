@@ -5,7 +5,7 @@ from typing import Annotated
 from dotenv import load_dotenv
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt
+import jwt
 from passlib.context import CryptContext
 
 from app.schemas.users import UserFilter, UserIn
