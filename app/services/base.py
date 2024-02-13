@@ -1,5 +1,6 @@
 import sqlite3
 
+import sqlalchemy
 import ormar
 import shutil
 from uuid import uuid4, UUID
@@ -43,7 +44,10 @@ class BaseService:
                 return await self.model.objects.create(**payload.dict(), uuid=uuid4())
             else:
                 return await self.model.objects.create(uuid=uuid4())
-        except sqlite3.IntegrityError:
+        except ormar.exceptions.NoMatch:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                                detail=f'{self.model.__name__} already exist')
+        except sqlalchemy.exc.IntegrityError:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                                 detail=f'{self.model.__name__} already exist')
 

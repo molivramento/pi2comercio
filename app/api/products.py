@@ -19,7 +19,7 @@ async def get_products(filters: ProductFilter = Depends()):
 
 
 @router.post("/")
-async def create_product(data: ProductIn):
+async def create_product(data: ProductIn): # type: ignore
     return await product_service.create(payload=data)
 
 

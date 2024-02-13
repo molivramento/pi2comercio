@@ -14,12 +14,12 @@ async def get_users(filters: UserFilter = Depends()):
 
 
 @router.post("/", response_model=UserOut | dict)
-async def create_user(data: CreateUserIn):
+async def create_user(data: CreateUserIn): # type: ignore
     return await user_service.create(payload=data)
 
 
 @router.put("/", response_model=UserOut | dict)
-async def update_user(payload: UserOut):
+async def update_user(payload: UserOut): # type: ignore
     return await user_service.update(payload=payload)
 
 

@@ -8,7 +8,7 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", 'false')
-database = databases.Database(DATABASE_URL, force_rollback=TEST_DATABASE_URL == 'true')
+database = databases.Database(DATABASE_URL, force_rollback=DATABASE_URL == 'true', min_size=5, max_size=20, max_queries=500, timeout=10)
 metadata = sqlalchemy.MetaData()
 
 
